@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hello Widya</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+  html { color-scheme: light; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+  /* Layout: one calm column, like a well-kept worksheet. Ruled lines, mono labels,
+     one highlighter stroke on the phrase that carries the pitch. */
+  :root {
+    --bg: #f3f6f7;
+    --surface: #ffffff;
+    --fg: #12262b;
+    --muted: #4f6469;
+    --line: #d5dee0;
+    --accent: #0e6b68;
+    --accent-ink: #ffffff;
+    --mark: #ffe680;
+    --display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+    --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e1a1d;
+      --surface: #152427;
+      --fg: #e8f0f1;
+      --muted: #9db3b7;
+      --line: #263a3e;
+      --accent: #5fcbc3;
+      --accent-ink: #08201f;
+      --mark: rgba(255, 214, 64, 0.3);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1a1d;
+    --surface: #152427;
+    --fg: #e8f0f1;
+    --muted: #9db3b7;
+    --line: #263a3e;
+    --accent: #5fcbc3;
+    --accent-ink: #08201f;
+    --mark: rgba(255, 214, 64, 0.3);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.1; margin: 0; }
+  p { margin: 0; }
+  a { color: var(--accent); }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+  .label {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  mark {
+    background: linear-gradient(transparent 58%, var(--mark) 58%);
+    color: inherit;
+    padding: 0 0.08em;
+  }
+
+  /* top bar */
+  .bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding-block: 20px; border-bottom: 1px solid var(--line);
+  }
+  .brand { font-family: var(--display); font-weight: 800; font-size: 20px; letter-spacing: -0.01em; }
+  .nav { display: flex; gap: 18px; font-size: 14px; flex-wrap: wrap; justify-content: flex-end; }
+  .nav a { color: var(--fg); text-decoration: none; }
+  .nav a:hover { color: var(--accent); }
+
+  /* hero */
+  .hero { padding-block: 56px 48px; display: grid; gap: 22px; }
+  .hero h1 { font-size: clamp(38px, 9vw, 68px); font-weight: 800; letter-spacing: -0.025em; max-width: 14ch; }
+  .hero .lead { font-size: 18px; max-width: 56ch; color: var(--muted); }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+  .btn {
+    display: inline-block; padding: 12px 20px; border-radius: 8px; font-weight: 500;
+    text-decoration: none; border: 1.5px solid var(--accent); font-size: 15px;
+  }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); }
+  .btn.ghost { color: var(--accent); background: transparent; }
+
+  /* hero worksheet */
+  .sheet {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: 16px; margin-top: 10px;
+  }
+  .sheet-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 460px; font-family: var(--mono); font-size: 13px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th { font-weight: 500; color: var(--muted); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  tr:last-child td { border-bottom: 0; }
+
+  /* sections */
+  section { padding-block: 44px; border-top: 1px solid var(--line); }
+  .sec-head { display: grid; gap: 8px; margin-bottom: 28px; }
+  .sec-head h2 { font-size: clamp(26px, 5.5vw, 36px); font-weight: 800; letter-spacing: -0.015em; }
+
+  .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px 32px; }
+  .service { border-top: 3px solid var(--accent); padding-top: 14px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .service h3 { font-size: 22px; font-weight: 600; }
+  .service ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-family: var(--mono); font-size: 13px; }
+  .service li::before { content: "✓ "; color: var(--accent); }
+
+  /* work */
+  .group-title { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-block: 8px 4px; }
+  .projects { display: grid; gap: 0; margin-bottom: 36px; }
+  .project { display: grid; gap: 8px; padding-block: 22px; border-bottom: 1px solid var(--line); min-width: 0; }
+  .project:last-child { border-bottom: 0; }
+  .tag {
+    justify-self: start; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1px solid var(--line); border-radius: 4px; padding: 2px 8px; color: var(--muted);
+  }
+  .project h3 { font-size: 22px; font-weight: 600; }
+  .project .scope { color: var(--muted); max-width: 62ch; }
+  .results { margin: 0; padding: 0; list-style: none; display: grid; gap: 3px; font-size: 15px; max-width: 62ch; }
+  .results li::before { content: "→ "; color: var(--accent); font-family: var(--mono); }
+  .tools { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+  .tools b { font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; margin-right: 6px; }
+  .link { justify-self: start; font-weight: 500; font-size: 15px; }
+  .also { color: var(--muted); max-width: 62ch; }
+  .also b { font-family: var(--mono); font-weight: 500; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-right: 6px; }
+
+  /* about */
+  .about { display: grid; gap: 28px; }
+  .about p { max-width: 62ch; color: var(--muted); font-size: 17px; }
+  .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 22px 32px; }
+  .skill { display: grid; gap: 4px; min-width: 0; }
+  .skill h3 { font-size: 19px; font-weight: 600; }
+  .skill p { font-size: 15px; }
+
+  /* contact */
+  .contact { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px; display: grid; gap: 18px; }
+  .contact h2 { font-size: clamp(26px, 5.5vw, 36px); font-weight: 800; letter-spacing: -0.015em; }
+  .rows { display: grid; gap: 0; }
+  .row { display: grid; grid-template-columns: 110px 1fr; gap: 12px; padding-block: 12px; border-top: 1px solid var(--line); align-items: baseline; }
+  .row span:last-child, .row a { min-width: 0; overflow-wrap: anywhere; }
+
+  footer { padding-block: 32px 40px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 480px) {
+    .hero { padding-block: 40px 36px; }
+    .row { grid-template-columns: 1fr; gap: 2px; }
+    .contact { padding: 20px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="bar">
+    <div class="brand">Hello Widya</div>
+    <nav class="nav" aria-label="Sections">
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <p class="label">Virtual Assistant · Online Research · Data Entry · Admin Support</p>
+      <h1>Hello, I'm Widya. I catch the <mark>small details</mark> for you.</h1>
+      <p class="lead">I help businesses find reliable information, organize it into clean spreadsheets, and keep daily admin tasks on track. I spent 5+ years in pharmacy and customer service, where one small mistake could cause a real problem. I bring the same careful habits to my research and data work.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://www.upwork.com/freelancers/~01615a8fabafcae113?p=2116354631029010432" target="_blank" rel="noopener">View my Upwork profile</a>
+        <a class="btn ghost" href="#work">See my work</a>
+      </div>
+
+      <div class="sheet" aria-label="Excerpt of an anonymized lead list">
+        <div class="sheet-head">
+          <span class="label">Excerpt · anonymized lead list</span>
+          <span class="label">12 columns per studio</span>
+        </div>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Category</th><th>State</th><th>Contact tier</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Studio 01</td><td>Pilates, strength &amp; recovery</td><td>IN</td><td>Tier 2</td></tr>
+              <tr><td>Studio 02</td><td>Yoga</td><td>NY</td><td>Tier 1</td></tr>
+              <tr><td>Studio 09</td><td>Pilates</td><td>MI</td><td>Tier 1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <section id="services">
+      <div class="sec-head">
+        <p class="label">Services</p>
+        <h2>What I can take off your plate</h2>
+      </div>
+      <div class="services">
+        <article class="service">
+          <h3>Online research and data collection</h3>
+          <ul>
+            <li>Web and market research</li>
+            <li>Prospect list building</li>
+            <li>Contact and company research</li>
+            <li>Data verification and collection</li>
+          </ul>
+        </article>
+        <article class="service">
+          <h3>Data entry</h3>
+          <ul>
+            <li>Manual data entry</li>
+            <li>Data processing</li>
+            <li>Spreadsheet management</li>
+            <li>Data cleaning and validation</li>
+            <li>PDF conversion to Google Sheets, Google Docs, Excel and Word</li>
+          </ul>
+        </article>
+        <article class="service">
+          <h3>Administrative support</h3>
+          <ul>
+            <li>Task organization and tracking</li>
+            <li>Document formatting and file management</li>
+            <li>Calendar scheduling and coordination</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="sec-head">
+        <p class="label">Work</p>
+        <h2>Projects, with the numbers</h2>
+      </div>
+
+      <p class="group-title">B2B research</p>
+      <div class="projects">
+        <article class="project">
+          <span class="tag">Case study · anonymized</span>
+          <h3>Decision-maker research for a boutique fitness SaaS</h3>
+          <p class="scope">Build a list of boutique fitness studios and find the right person to contact at each one, with every row marked for how reliable the contact is.</p>
+          <ul class="results">
+            <li>20 studios on the list</li>
+            <li>12 columns per studio, including decision-maker role, email verification and contact tier</li>
+            <li>A business observation and an unresolved question recorded for each studio</li>
+          </ul>
+          <p class="tools"><b>Tools</b>Google Sheets</p>
+          <a class="link" href="https://docs.google.com/spreadsheets/d/1tCBXW7EWpkFQepV8MNpKSpr_qv6YCVNcZBXeMgd7YHA/edit?gid=1612539085#gid=1612539085" target="_blank" rel="noopener">View the anonymized list build →</a>
+        </article>
+        <article class="project">
+          <span class="tag">Portfolio project</span>
+          <h3>Decision-maker prospect database, 50 companies</h3>
+          <p class="scope">Collect the business address, phone number, CEO, founder, owner or partner name and job title for 50 companies.</p>
+          <ul class="results">
+            <li>50-company prospect database built from Apollo exports plus manual verification through Google Search and LinkedIn</li>
+            <li>A clean spreadsheet ready for business use and outreach</li>
+          </ul>
+          <p class="tools"><b>Tools</b>Google Sheets · Google Search · Apollo · LinkedIn</p>
+          <a class="link" href="https://docs.google.com/spreadsheets/d/1ns4up-8D3hVv3Ekq0Wmpt_H6rsMNLiY3SW77wMZzHr8/edit?usp=sharing" target="_blank" rel="noopener">View full project →</a>
+        </article>
+        <article class="project">
+          <span class="tag">Portfolio project</span>
+          <h3>US coffee shop lead database</h3>
+          <p class="scope">Research relevant businesses, verify the information that is available, and organize the findings into a structured prospect database.</p>
+          <ul class="results">
+            <li>20 businesses researched</li>
+            <li>12 high-priority and 8 medium-priority prospects identified</li>
+            <li>5 high-potential prospects highlighted</li>
+          </ul>
+          <p class="tools"><b>Tools</b>Google Sheets · Google Search · Google Maps</p>
+          <a class="link" href="https://docs.google.com/spreadsheets/d/1UZMQV-2AlPuhEJ_pzO4eOZJiMPrf9gXPGtJ7K23WPXE/edit?gid=0#gid=0" target="_blank" rel="noopener">View full project →</a>
+        </article>
+      </div>
+
+      <p class="group-title">General virtual assistant work</p>
+      <div class="projects">
+        <article class="project">
+          <span class="tag">Portfolio project</span>
+          <h3>E-commerce product data cleanup</h3>
+          <p class="scope">Turn raw product data into a clean, consistent and easy-to-review spreadsheet for e-commerce use.</p>
+          <ul class="results">
+            <li>38 raw product records processed, 36 unique products identified</li>
+            <li>6 data issues flagged, including 2 duplicate SKUs</li>
+            <li>7 low-stock products flagged</li>
+          </ul>
+          <p class="tools"><b>Tools</b>Google Sheets</p>
+          <a class="link" href="https://canva.link/d9kar3xuv8o9v1t" target="_blank" rel="noopener">View full project →</a>
+        </article>
+        <article class="project">
+          <span class="tag">Portfolio project</span>
+          <h3>Scanned PDFs to Google Docs and Google Sheets</h3>
+          <p class="scope">Convert non-editable scanned PDFs into fully editable Google Docs that keep the original layout, fonts and footer details, and extract a scanned member directory into a structured spreadsheet.</p>
+          <ul class="results">
+            <li>Scanned documents rebuilt as editable Google Docs that follow the client's style guide</li>
+            <li>Directory entries turned into a clean, organized sheet</li>
+          </ul>
+          <p class="tools"><b>Tools</b>OCRSpace · Google Docs · Google Sheets</p>
+        </article>
+        <article class="project">
+          <span class="tag">Portfolio project</span>
+          <h3>Project board and weekly report</h3>
+          <p class="scope">Organize administrative tasks, deadlines and project information into a clear workflow.</p>
+          <ul class="results">
+            <li>18 tasks organized by status, deadline and assignee</li>
+            <li>4 financial figures tracked: income, expenses, net revenue and pending transactions</li>
+            <li>A weekly status report covering progress, finances and client action items</li>
+          </ul>
+          <p class="tools"><b>Tools</b>Trello · Google Docs · Google Sheets</p>
+          <a class="link" href="https://canva.link/bqv8muj6lgpoxt0" target="_blank" rel="noopener">View full project →</a>
+        </article>
+      </div>
+      <p class="also"><b>Also offered</b>Content creation and scheduling (<a href="https://docs.google.com/spreadsheets/d/1zUGAaHOPwEtMaLgchaCNYcoHdxAMQSaFqUzlfqBPG2I/edit?gid=0#gid=0" target="_blank" rel="noopener">view sheet</a>), and travel planning with budget tracking (<a href="https://docs.google.com/spreadsheets/d/1jvhguqUEBKQrynlxs0H_icX8shEWsqWV/edit?usp=sharing&amp;ouid=112730494641614255634&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">view file</a>).</p>
+    </section>
+
+    <section id="about">
+      <div class="about">
+        <div class="sec-head" style="margin-bottom: 0;">
+          <p class="label">About</p>
+          <h2>Careful work comes from habit</h2>
+        </div>
+        <p>My background is in pharmacy and customer service, more than five years where accuracy was part of the job. I am comfortable with Google Sheets, online research, and tools like Apollo, Trello, Notion and Canva. My goal is simple: give you accurate, organized support that saves you time.</p>
+        <div class="skills">
+          <div class="skill"><h3>Attention to detail</h3><p>I keep data and records accurate.</p></div>
+          <div class="skill"><h3>Communication</h3><p>I give clear updates on task progress.</p></div>
+          <div class="skill"><h3>Time management</h3><p>I manage priorities and deadlines with Trello, Google Calendar and Notion.</p></div>
+          <div class="skill"><h3>Reliability</h3><p>I follow instructions carefully and finish what I start.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="contact">
+        <p class="label">Contact</p>
+        <h2>Have a task in mind? Send me the details.</h2>
+        <p style="color: var(--muted); max-width: 54ch;">Tell me what you need done, the format you want it in and your deadline. I will reply with how I would approach it.</p>
+        <div class="rows">
+          <div class="row"><span class="label">Upwork</span><a href="https://www.upwork.com/freelancers/~01615a8fabafcae113?p=2116354631029010432" target="_blank" rel="noopener">Widya A. on Upwork</a></div>
+          <div class="row"><span class="label">Email</span><a href="mailto:hellowidyaemail@gmail.com">hellowidyaemail@gmail.com</a></div>
+          <div class="row"><span class="label">LinkedIn</span><a href="https://www.linkedin.com/in/hellowidya/" target="_blank" rel="noopener">linkedin.com/in/hellowidya</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Hello Widya</span>
+    <span>Detail-oriented virtual assistant</span>
+  </footer>
+</div>
+</body>
+</html>
